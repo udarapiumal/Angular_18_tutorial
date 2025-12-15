@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+ <app-alert [alertType]="'Error'" ></app-alert>
+<body class="bg-light p-4">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- PROJECT LIST -->
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        Project List
+                        
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Sr No</th>
+                                    <th>Project Name</th>
+                                    <th>Client Name</th>
+                                    <th>Start Date</th>
+                                    <th>Expected End Date</th>
+                                    <th>Lead By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(projectList().length === 0) {
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">No projects added yet</td>
+                                    </tr>
+                                }
+                                @for (project of projectList(); track $index) {
+                                    <tr>
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{project.projectName}}</td>
+                                        <td>{{project.clientName}}</td>
+                                        <td>{{project.startDate | date:'dd/MM/yyyy'}}</td>
+                                        <td>{{project.expectedEndDate | date:'dd/MM/yyyy'}}</td>
+                                        <td>{{project.leadByEmpName}}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary me-1">Edit</button>
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NEW PROJECT FORM -->
+            <div class="col-5">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        New Project
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="projectForm">
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Project Name</label>
+                                    <input type="text" formControlName="projectName" class="form-control">
+                                    @if (projectForm.controls['projectName'].touched){
+                                    <div class="text-danger">
+                                        @if(projectForm.controls['projectName'].errors?.['required']){
+                                            <span>This is Required</span>
+                                        }
+                                        @if(projectForm.controls['projectName'].errors?.['minlength']){
+                                            <span>Min 4 Char Required</span>
+                                        }
+                                    </div>
+                                }
+
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Start Date</label>
+                                    <input type="date" formControlName="startDate" class="form-control">
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Expected End Date</label>
+                                    <input type="date" formControlName="expectedEndDate"class="form-control">
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Contact Name</label>
+                                    <input type="text" formControlName="contactPerson" class="form-control">
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Contact Mobile</label>
+                                    <input type="text"  formControlName="contactPersonContactNo" class="form-control">
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Contact Email</label>
+                                    <input type="email"  formControlName="contactPersonEmailId"class="form-control">
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Total Employee Count</label>
+                                    <input type="number" formControlName="totalEmpWorking" class="form-control">
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Project Costing</label>
+                                    <input type="number" formControlName="projectCost" class="form-control">
+                                </div>
+                                
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Project Description</label>
+                                    <textarea class="form-control" formControlName="projectDetails"rows="3"></textarea>
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Select Client</label>
+                                    <select  formControlName="clientId"class="form-select">
+                                        <option selected>Select Client</option>
+                                          @for (item of clientList;track $index){
+                                            <option [value]="item.clientId">{{item.companyName}}  </option>
+                                        }
+                                    </select>
+                                </div>
+                                
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Lead By</label>
+                                    <select  formControlName="leadByEmpId"class="form-select">
+                                        <option selected>Select Employee</option>
+                                        @for (item of employeeList;track $index){
+                                            <option [value]="item.empId">{{item.empName}} - {{item.empCode}} </option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    <button type="reset" class="btn btn-secondary w-100">Reset</button>
+                                </div>
+                                
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-success w-100" (click)="OnSaveProject()">Save Project</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
