@@ -15,6 +15,7 @@ export class LoginComponent {
       password:''
     };
     router=inject(Router)
+    
 
     onLogin(){
       if(this.loginObj.email == 'admin@gmail.com' && this.loginObj.password=="11223" ){
