@@ -11,14 +11,14 @@ export class ClientService {
 
   constructor(private http:HttpClient) { }
 
-
+  private base_url= "http://localhost:5158";
 
   getAllUsers() {
     return this.http.get("https://jsonplaceholder.typicode.com/users");
   }
 
   getAllClients():Observable<APIresponseModel>{
-    return this.http.get<APIresponseModel>("api/api/ClientStrive/GetAllClients");
+    return this.http.get<APIresponseModel>(`${this.base_url}/api/Client/SelectAllClients`);
   }
 
   getAllClientProject():Observable<APIresponseModel>{
@@ -27,11 +27,11 @@ export class ClientService {
   }
   
   addUpdate(obj:Client):Observable<APIresponseModel>{
-    return this.http.post<APIresponseModel>("api/api/ClientStrive/AddUpdateClient",obj);
+    return this.http.post<APIresponseModel>(`${this.base_url}/api/Client/InsertClient`,obj);
   }
   
   deleteClientById(id:number):Observable<APIresponseModel>{
-  return this.http.delete<APIresponseModel>(`api/api/ClientStrive/DeleteClientByClientId?clientId=${id}`);
+  return this.http.delete<APIresponseModel>(`${this.base_url}/api/Client/DeleteClient/${id}`);
 }
   getAllEmployee():Observable<APIresponseModel>{
     return this.http.get<APIresponseModel>("api/api/ClientStrive/GetAllEmployee");
